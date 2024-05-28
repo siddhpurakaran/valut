@@ -67,9 +67,14 @@ contract VaultScript is Script {
         console.log("Deposited : %s", vault.usersETH(player1));
         console.log("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
 
-        vault.wrapETH(2 ether);
-        console.log("Wrapped : %s ETH to wETH", vault.usersTokens(player1, address(weth)));
+        vault.wrapETH(4 ether);
+        console.log("Wrapped %s ETH to wETH", vault.usersTokens(player1, address(weth)));
         console.log("User's Remaining balance : %s ETH", vault.usersETH(player1));
+        console.log("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
+
+        vault.unwrapETH(1 ether);
+        console.log("Unrapped 1 wETH to ETH");
+        console.log("User's Remaining wETH : %s", vault.usersTokens(player1, address(weth)));
         console.log("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=");
         vm.stopPrank();
     }

@@ -18,6 +18,7 @@ contract Vault is ReentrancyGuard {
     event ETHWithdrawn(address indexed withdrawer, uint256 amount);
     event TokensWithdrawn(address indexed token, address indexed withdrawer, uint256 amount);
     event EthWrapped(address indexed user, uint256 amount);
+    event EthUnwrapped(address indexed user, uint256 amount);
 
     error AddressZero();
     error InvalidAmount();
@@ -26,11 +27,9 @@ contract Vault is ReentrancyGuard {
         wETH = _weth;
     }
 
-    receive() external payable {
-        depositETH();
-    }
+    receive() external payable {}
 
-    function depositETH() public payable nonReentrant {
+    function depositETH() external payable nonReentrant {
         usersETH[msg.sender] += msg.value;
         emit EthDeposited(msg.sender, msg.value);
     }
@@ -80,7 +79,18 @@ contract Vault is ReentrancyGuard {
         }
         usersETH[wrapper] -= amount;
         usersTokens[wrapper][address(wETH)] += amount;
-        payable(address(wETH)).send(amount);
+        wETH.deposit{value: amount}();
         emit EthWrapped(wrapper, amount);
+    }
+
+    function unwrapETH(uint256 amount) external {
+        address wrapper = msg.sender;
+        if (usersTokens[wrapper][address(wETH)] < amount) {
+            revert InvalidAmount();
+        }
+        usersETH[wrapper] += amount;
+        usersTokens[wrapper][address(wETH)] -= amount;
+        wETH.withdraw(amount);
+        emit EthUnwrapped(wrapper, amount);
     }
 }
