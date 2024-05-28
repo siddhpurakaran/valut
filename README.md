@@ -18,5 +18,6 @@ $ forge script script/local/Vault.s.sol:VaultScript
 ```
 
 ### Live Demo
-![image](https://github.com/siddhpurakaran/valut/assets/28296673/f1ca5cbb-8d7f-4856-b973-389056ebb926)
+![Screenshot from 2024-05-28 22-49-15](https://github.com/siddhpurakaran/vault/assets/28296673/c0516cf0-b80f-4d46-bf1d-79c60e6c39e0)
+
 
